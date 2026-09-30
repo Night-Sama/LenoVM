@@ -3,38 +3,19 @@ import { ref, reactive } from "vue"
 import DialogueBox from "./components/DialogueBox.vue"
 import Character from "./components/Character.vue"
 import { createStory } from "./components/story.js"
+import { p11 } from "./components/Characters/positions.js"
+import { charlist } from "./components/Characters/characters.js"
 
 const dialogueBox = ref(null)
-
-const p11 = 50
-
-const p21 = 35
-const p22 = 65
-
-const p31 = 25
-const p32 = 50
-const p33 = 75
-
-const p41 = 15
-const p42 = 38
-const p43 = 62
-const p44 = 85
-
-let m = reactive({
-  charactername: "Markiplier",
-  position: p11,
-  visible: false,
-  expression: "b",
-  pose: "4"
-})
 
 const storyLines = []
 let currentLine = 0
 
-function speak(text, name = false) {
+function speak(text, char = false) {
+  const charname = typeof char === "object" ? char.charactername : char
   storyLines.push({
     text: text,
-    name: name,
+    name: charname,
     type: "speech"
   })
 }
@@ -85,13 +66,11 @@ function story(text) {
 // }
 
 function next() {
-  // Click while typing: just reveal the full line
   if (dialogueBox.value.getIsTyping()) {
     dialogueBox.value.skipTyping()
     return
   }
 
-  // Otherwise consume lines until one needs a click (speech/story)
   while (currentLine < storyLines.length) {
     const line = storyLines[currentLine++]
 
@@ -112,7 +91,6 @@ function next() {
     return
   }
 
-  // Ran out of lines
   dialogueBox.value.hideBox()
 }
 
@@ -144,20 +122,23 @@ createStory({
     speak,
     story,
     show,
-    hide,
-    m
+    hide
 })
 
 </script>
 
 <template>
   <main class="container" @click="next">
-    <Character 
-      :charactername="m.charactername"
-      :position="m.position"
-      :visible="m.visible"
-      :expression="m.expression"
-      :pose="m.pose"
+    <!-- <div class="guides">
+      <div v-for="p in [15, 38, 62, 85]" :key="p"
+          :style="{ left: (p + 2) + 'vw'}" class="guide">{{ p }}</div>
+    </div> -->
+    <Character v-for="char in charlist"
+      :charactername="char.charactername"
+      :position="char.position"
+      :visible="char.visible"
+      :expression="char.expression"
+      :pose="char.pose"
     />
     <DialogueBox ref="dialogueBox" class="dialoguebox"/>
   </main>
@@ -168,6 +149,20 @@ createStory({
 * {
     user-select: none;
 }
+
+/* .guides { 
+  position: fixed;
+  inset: 0;
+  pointer-events: none; 
+  z-index: 99999; }
+
+.guide { 
+  position: fixed; 
+  top: 0; 
+  bottom: 0; 
+  transform: translateX(-100%);
+  border-left: 1px solid red;
+         color: red; font-size: 12px; } */
 
 .container {
   position: fixed;

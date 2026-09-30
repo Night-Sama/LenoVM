@@ -145,6 +145,7 @@ defineExpose({
   border-radius: 1vw;
   border-bottom: 0;
   padding: 1%;
+  background-color: white;
 }
 
 button {

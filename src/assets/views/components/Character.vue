@@ -43,7 +43,7 @@ const bodyimg = computed(() =>
         <div
             v-if="props.visible"
             class="character-container"
-            :style="{ left: props.position + '%' }"
+            :style="{ left: (2 + props.position) + 'vw' }"
         >
             <div class="character">
                 <img class="head" :src="headimg">
@@ -56,35 +56,7 @@ const bodyimg = computed(() =>
 
 <style scoped>
 
-.character-fade-enter-active,
-.character-fade-leave-active {
-    transition: opacity 0.1s ease;
-}
-.character-fade-enter-from,
-.character-fade-leave-to {
-    opacity: 0;
-}
 
-.character-fade-enter-active .character,
-.character-fade-leave-active .character {
-    transition: transform 0.2s ease;
-}
-
-.character-fade-enter-from .character,
-.character-fade-leave-to .character {
-    transform: scale(0.6);
-}
-
-/* .character-fade-enter-active .character,
-.character-fade-leave-active .character {
-    transition: opacity 0.3s ease, transform 0.2s ease;
-}
-
-.character-fade-enter-from .character,
-.character-fade-leave-to .character {
-    opacity: 0;
-    transform: scale(0.5);
-} */
 
 * {
     user-select: none;
@@ -124,4 +96,22 @@ const bodyimg = computed(() =>
     transform: translateX(-50%);
 }
 
+.character-fade-enter-active,
+.character-fade-leave-active {
+    transition: opacity 0.1s ease;
+}
+.character-fade-enter-from,
+.character-fade-leave-to {
+    opacity: 0;
+}
+
+.character-fade-enter-active .character,
+.character-fade-leave-active .character {
+    transition: transform 0.2s ease;
+}
+
+.character-fade-enter-from .character,
+.character-fade-leave-to .character {
+    transform: scale(0.6);
+}
 </style>
