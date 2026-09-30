@@ -1,12 +1,14 @@
 <script setup>
-import { ref, reactive } from "vue"
+import { ref } from "vue"
 import DialogueBox from "./components/DialogueBox.vue"
 import Character from "./components/Character.vue"
+import Background from "./components/Background.vue"
 import { createStory } from "./components/story.js"
 import { p11 } from "./components/Characters/positions.js"
 import { charlist } from "./components/Characters/characters.js"
 
 const dialogueBox = ref(null)
+const background = ref(null)
 
 const storyLines = []
 let currentLine = 0
@@ -87,6 +89,11 @@ function next() {
       continue
     }
 
+    if (line.type === "scene") {
+      background.value = line.name
+      continue
+    }
+
     dialogueBox.value.speak(line.text, line.name, line.type)
     return
   }
@@ -118,11 +125,16 @@ function hide(charname) {
   })
 }
 
+function scene(name) {
+  storyLines.push({ type: "scene", name })
+}
+
 createStory({
     speak,
     story,
     show,
-    hide
+    hide,
+    scene
 })
 
 </script>
@@ -133,6 +145,7 @@ createStory({
       <div v-for="p in [15, 38, 62, 85]" :key="p"
           :style="{ left: (p + 2) + 'vw'}" class="guide">{{ p }}</div>
     </div> -->
+    <Background :bgname="background" />
     <Character v-for="char in charlist"
       :charactername="char.charactername"
       :position="char.position"

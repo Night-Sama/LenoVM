@@ -1,7 +1,8 @@
 import { p11, p21, p22, p31, p32, p33, p41, p42, p43, p44 } from "./Characters/positions"
 import { m, a, b, c } from "./Characters/characters"
-export function createStory({ speak, story, show, hide }) {
+export function createStory({ speak, story, show, hide, scene }) {
 
+    scene("alley")
     show(m, p11, "2", "r")
     speak("Hello everybody, my name is Welcome.", m)
 
@@ -22,5 +23,5 @@ export function createStory({ speak, story, show, hide }) {
     show(b, p43)
     show(c, p44)
     speak("Markiplier.", a)
-    
+
 }

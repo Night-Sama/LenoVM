@@ -117,7 +117,7 @@ defineExpose({
   font-weight: 500;
   padding: 1%;
   border-style: solid;
-  z-index: 9999;
+  z-index: 999;
 }
 
 #textbox {
@@ -152,6 +152,7 @@ button {
   border: 1vh solid black;
   border-radius: 2vh;
   padding: 0.5vh;
+  background-color: white;
 }
 
 button:hover {
