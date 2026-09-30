@@ -6,23 +6,23 @@ import { createStory } from "./components/story.js"
 
 const dialogueBox = ref(null)
 
-const t11 = 50
+const p11 = 50
 
-const t21 = 35
-const t22 = 65
+const p21 = 35
+const p22 = 65
 
-const t31 = 25
-const t32 = 50
-const t33 = 75
+const p31 = 25
+const p32 = 50
+const p33 = 75
 
-const t41 = 15
-const t42 = 38
-const t43 = 62
-const t44 = 85
+const p41 = 15
+const p42 = 38
+const p43 = 62
+const p44 = 85
 
 let m = reactive({
   charactername: "Markiplier",
-  position: t11,
+  position: p11,
   visible: false,
   expression: "b",
   pose: "4"
@@ -116,7 +116,7 @@ function next() {
   dialogueBox.value.hideBox()
 }
 
-function show(char, position = t11, pose = "4", expression = "b") {
+function show(char, position = p11, pose = "4", expression = "b") {
   storyLines.push({
     type: "show",
     character: char,
@@ -126,7 +126,7 @@ function show(char, position = t11, pose = "4", expression = "b") {
   })
 }
 
-// function show(character, position = t11, pose = "4", expression = "b") {
+// function show(character, position = p11, pose = "4", expression = "b") {
 //   character.position = position
 //   character.pose = pose
 //   character.expression = expression
