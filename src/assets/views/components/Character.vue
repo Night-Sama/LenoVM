@@ -69,6 +69,7 @@ const bodyimg = computed(() =>
     bottom: 0;
     transform: translateX(-50%);
     z-index: 500;
+    transition: left 0.2s ease;
 }
 
 .character {

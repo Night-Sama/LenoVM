@@ -16,4 +16,4 @@ export const a = makeCharacter("Markiplier")
 export const b = makeCharacter("Markiplier")
 export const c = makeCharacter("Markiplier")
 
-export const charlist = [m, a, b, c]
+export const charlist = reactive([m, a, b, c])
