@@ -1,6 +1,6 @@
 import { p11, p21, p22, p31, p32, p33, p41, p42, p43, p44 } from "./Characters/positions"
 import { m, a, b, c } from "./Characters/characters"
-export function createStory({ speak, story, show, hide, scene }) {
+export function createStory({ speak, story, show, hide, scene, wait }) {
 
     scene("living_room_n")
     show(m, p11)
@@ -10,7 +10,9 @@ export function createStory({ speak, story, show, hide, scene }) {
     // story("The story progresses")
 
     show(m, p21)
+    wait(0.5)
     show(a, p22)
+    wait(0.5)
     speak("*GASP* MarkipliERS...?\nWhy are there two of you?", m)
 
     show(m, p31)

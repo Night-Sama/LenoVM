@@ -12,6 +12,7 @@ const background = ref(null)
 
 const storyLines = []
 let currentLine = 0
+let isWaiting
 
 function speak(text, char = false) {
   const charname = typeof char === "object" ? char.charactername : char
@@ -30,44 +31,9 @@ function story(text) {
   })
 }
 
-// function next() {
-//   if (currentLine >= storyLines.length) {
-//     dialogueBox.value.hideBox()
-//     return
-//   }
-
-//   const line = storyLines[currentLine]
-
-//   if (line.type === "show") {
-//     line.character.position = line.position
-//     line.character.pose = line.pose
-//     line.character.expression = line.expression
-//     line.character.visible = true
-
-//     currentLine++
-//     next()
-//     return
-//   } else if (line.type === "hide") {
-//     line.character.visible = false
-
-//     currentLine++
-//     next()
-//     return
-//   } else {
-
-//     dialogueBox.value.speak(
-//       line.text,
-//       line.name,
-//       line.type
-//     )
-
-//     if (!dialogueBox.value.getIsTyping()) {
-//       currentLine++
-//     }
-//   }
-// }
-
 function next() {
+  if (isWaiting) return
+
   if (dialogueBox.value.getIsTyping()) {
     dialogueBox.value.skipTyping()
     return
@@ -94,6 +60,17 @@ function next() {
       continue
     }
 
+    if (line.type === "wait") {
+      isWaiting = true
+      if (isWaiting) {
+        setTimeout(() => {
+          isWaiting = false
+          next()
+        }, line.duration)
+      }
+      return
+    }
+
     dialogueBox.value.speak(line.text, line.name, line.type)
     return
   }
@@ -111,13 +88,6 @@ function show(char, position = p11, pose = "4", expression = "b") {
   })
 }
 
-// function show(character, position = p11, pose = "4", expression = "b") {
-//   character.position = position
-//   character.pose = pose
-//   character.expression = expression
-//   character.visible = true
-// }
-
 function hide(charname) {
   storyLines.push({
     type: "hide",
@@ -129,12 +99,20 @@ function scene(name) {
   storyLines.push({ type: "scene", name })
 }
 
+function wait(seconds) {
+  storyLines.push({
+    type: "wait",
+    duration: seconds * 1000
+  })
+}
+
 createStory({
     speak,
     story,
     show,
     hide,
-    scene
+    scene,
+    wait
 })
 
 </script>
