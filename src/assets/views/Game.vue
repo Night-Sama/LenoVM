@@ -13,21 +13,29 @@ const background = ref(null)
 const storyLines = []
 let currentLine = 0
 let isWaiting
+const skip = true
 
-function speak(text, char = false) {
+function interrupt(percentage = 50) {
+  return percentage / 100
+}
+
+function say(text, char = false, interrupted = false) {
   const charname = typeof char === "object" ? char.charactername : char
   storyLines.push({
     text: text,
     name: charname,
-    type: "speech"
+    type: "speech",
+    interruption: interrupted
   })
 }
 
-function story(text) {
+function story(text, char = false, interrupted = false) {
+  const charname = typeof char === "object" ? char.charactername : char
   storyLines.push({
     text: text,
-    name: false,
-    type: "story"
+    name: charname,
+    type: "story",
+    interruption: interrupted
   })
 }
 
@@ -41,6 +49,12 @@ function next() {
 
   while (currentLine < storyLines.length) {
     const line = storyLines[currentLine++]
+    let interrupted
+
+    if ((line.type === "speech" || line.type === "story") && line.interruption) {
+      interrupted = true
+      line.text = line.text.slice(0, line.text.length * line.interruption)
+    }
 
     if (line.type === "show") {
       line.character.position = line.position
@@ -71,10 +85,19 @@ function next() {
       return
     }
 
-    dialogueBox.value.speak(line.text, line.name, line.type)
+    if (interrupted === true) {
+      dialogueBox.value.speak(line.text, line.name, interrupted, line.type,)
+      autoAdvance(0)
+    } else {
+      dialogueBox.value.speak(line.text, line.name, false, line.type)
+    }
+    const upcoming = storyLines[currentLine]
+    if (line.type === "wait" && upcoming.initial) {
+      currentLine++
+      autoAdvance(upcoming.duration)
+    }
     return
   }
-
   dialogueBox.value.hideBox()
 }
 
@@ -99,20 +122,37 @@ function scene(name) {
   storyLines.push({ type: "scene", name })
 }
 
-function wait(seconds) {
+function wait(seconds, initial) {
   storyLines.push({
     type: "wait",
-    duration: seconds * 1000
+    duration: seconds * 1000,
+    initial: initial
   })
 }
 
+function autoAdvance(duration) {
+  isWaiting = true
+  next()
+  const check = setInterval(() => {
+    if (!dialogueBox.value.getIsTyping()) {
+      clearInterval(check)
+      setTimeout(() => {
+        isWaiting = false
+        next()
+      }, duration)
+    }
+  }, 50)
+}
+
 createStory({
-    speak,
-    story,
-    show,
-    hide,
-    scene,
-    wait
+  say,
+  story,
+  show,
+  hide,
+  scene,
+  wait,
+  skip,
+  interrupt
 })
 
 </script>

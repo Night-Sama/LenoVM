@@ -19,7 +19,7 @@ let isTyping = false
 let typingInterval = null
 let fullText = ""
 
-function speak(text, name = false, type = "default", speed = 30) {
+function speak(text, name = false, interruption = false, type = "default", speed = 30) {
   clearInterval(typingInterval)
 
   if (!textBoxIsVisible.value) {
@@ -36,7 +36,7 @@ function speak(text, name = false, type = "default", speed = 30) {
     nameIsVisible.value = false
   }
 
-  fullText = type === "speech" ? `"${text}"` : text
+  fullText = type === "speech" ? (interruption ? `"${text}` : `"${text}"`) : text
   textBoxText.value = ""
   isTyping = true
 
