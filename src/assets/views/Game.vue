@@ -46,14 +46,16 @@ function next() {
     dialogueBox.value.skipTyping()
     return
   }
+  
 
   while (currentLine < storyLines.length) {
     const line = storyLines[currentLine++]
     let interrupted
+    let thisLine = line.text
 
     if ((line.type === "speech" || line.type === "story") && line.interruption) {
       interrupted = true
-      line.text = line.text.slice(0, line.text.length * line.interruption)
+      thisLine = line.text.slice(0, line.text.length * line.interruption)
     }
 
     if (line.type === "show") {
@@ -86,10 +88,10 @@ function next() {
     }
 
     if (interrupted === true) {
-      dialogueBox.value.speak(line.text, line.name, interrupted, line.type,)
+      dialogueBox.value.speak(thisLine, line.name, interrupted, line.type,)
       autoAdvance(0)
     } else {
-      dialogueBox.value.speak(line.text, line.name, false, line.type)
+      dialogueBox.value.speak(thisLine, line.name, false, line.type)
     }
     const upcoming = storyLines[currentLine]
     if (line.type === "wait" && upcoming.initial) {
