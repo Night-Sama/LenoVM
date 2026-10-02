@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue"
+import { ref, onMounted, onUnmounted } from "vue"
 import DialogueBox from "./components/DialogueBox.vue"
 import Character from "./components/Character.vue"
 import Background from "./components/Background.vue"
@@ -14,6 +14,8 @@ const storyLines = []
 let currentLine = 0
 let isWaiting
 const skip = true
+const tbox = 0
+const every = 4
 
 function interrupt(percentage = 50) {
   return percentage / 100
@@ -67,7 +69,15 @@ function next() {
     }
 
     if (line.type === "hide") {
-      line.character.visible = false
+      if (line.character === tbox) {
+        dialogueBox.value.hideBox()
+      } else if (line.character === every) {
+        charlist.forEach(char => {
+          char.visible = false
+        });
+      } else {
+        line.character.visible = false
+      }
       continue
     }
 
@@ -102,6 +112,16 @@ function next() {
   }
   dialogueBox.value.hideBox()
 }
+
+function onKeydown(e) {
+  if (e.code === "Space") {
+    e.preventDefault()
+    if (!e.repeat) next()
+  }
+}
+
+onMounted(() => window.addEventListener("keydown", onKeydown))
+onUnmounted(() => window.removeEventListener("keydown", onKeydown))
 
 function show(char, position = p11, pose = "4", expression = "b") {
   storyLines.push({
@@ -154,7 +174,9 @@ createStory({
   scene,
   wait,
   skip,
-  interrupt
+  interrupt,
+  tbox,
+  every
 })
 
 </script>

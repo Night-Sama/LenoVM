@@ -1,8 +1,9 @@
 import { p11, p21, p22, p31, p32, p33, p41, p42, p43, p44 } from "./Characters/positions"
 import { m, a, b, c } from "./Characters/characters"
-export function createStory({ say, story, show, hide, scene, wait, skip, interrupt }) {
+export function createStory({ say, story, show, hide, scene, wait, skip, interrupt, tbox, every }) {
 
     scene("living_room_n")
+    wait(0.25)
     show(m, p11)
     say("Markiplier?", m)
 
@@ -15,9 +16,15 @@ export function createStory({ say, story, show, hide, scene, wait, skip, interru
     wait(0.5)
     say("*GASP* MarkipliERS...?\nWhy are there two of you?", m, interrupt(50))
 
+    hide(tbox)
+    hide(every)
+    scene("yuri_bedroom")
+    wait(0.25)
+
     show(m, p31)
     show(a, p32)
     show(b, p33)
+    wait(0.25)
     // wait(1.5)
     say("...Oh no...", "Narrator")
 
